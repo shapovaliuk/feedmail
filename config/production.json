@@ -1,0 +1,13 @@
+{
+    "feedmail": {
+        "db": {
+            "url": "",
+            "name": "prod"
+        },
+        "logger": {
+            "level": "debug",
+            "filename": "./backend.log"
+        }
+    }
+}
+

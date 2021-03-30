@@ -5,9 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=development jest",
-    "start": "NODE_ENV=production node ./app.js",
+    "start": "node ./app.js",
     "start:dev": "cross-env NODE_ENV=development node ./app.js",
-    "start:pro": "npm start",
+    "start:pro": "cross-env NODE_ENV=production node ./app.js",
     "start:watch": "nodemon cross-env NODE_ENV=development ./app.js"
   },
   "author": "",

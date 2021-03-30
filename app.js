@@ -21,10 +21,7 @@ const userRoutes = require('./src/routes/userroutes')
 const mailRoutes = require('./src/routes/mailroutes')
 
 const dbConfig = config.get('feedmail.db')
-dbConfig.url = process.env.COSMOS_DB_URI || dbConfig.url
-
-const db = new Database(dbConfig)
-db.connect(dbConfig)
+const db = new Database()
 
 const userController = new UserController(db)
 const mailController = new MailController(db, new RssParser(), new MailBuilder(), new Sender())
@@ -33,6 +30,7 @@ const port = process.env.PORT || config.get('feedmail.port')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.json());
 
 app.use('/v1', userRoutes(userController))
 app.use('/v1', mailRoutes(mailController))
@@ -42,5 +40,7 @@ logger.info({ label: 'APP', message: `| __| __| __|   \\|  \\/  | /_\\ |_ _| |  
 logger.info({ label: 'APP', message: `| _|| _|| _|| |) | |\\/| |/ _ \\ | || |__  ` })
 logger.info({ label: 'APP', message: `|_| |___|___|___/|_|  |_/_/ \\_\\___|____| ` })
 logger.info({ label: 'APP', message: `                                         ` })
+
+db.connect(dbConfig)
 
 app.listen(port)

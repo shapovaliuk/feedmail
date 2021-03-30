@@ -11,8 +11,6 @@ function Database () {
 
   this.connect = async (config) => {
     try {
-      logger.info({ label: 'DATABASE', message: `connect to ${config.url}` })
-
       _client = await MongoClient.connect(config.url, config.options)
       _db = _client.db(config.name)
 

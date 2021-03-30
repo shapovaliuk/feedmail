@@ -106,8 +106,12 @@ function getPreview () {
 }
 
 function getData () {
-  const email = document.getElementById('input_email').value || 'bparowicz@gmail.com'
+  const email = document.getElementById('input_email').value
 
+  if (!email) {
+    return
+  }
+  
   fetch(`/v1/user?email=${email}`, {
     method: 'GET',
     headers: {

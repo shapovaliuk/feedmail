@@ -12,9 +12,9 @@ function User (storage) {
   const _storage = storage
 
   this.add = async (req, res) => {
-    logger.debug({ label: 'USER CONTROLLER', message: 'Add user request: ' + JSON.stringify(req.body) })
-
     try {
+      logger.debug({ label: 'USER CONTROLLER', message: 'Add user request: ' + JSON.stringify(req.body) })
+
       const result = validate(req.body, userSchema)
 
       if (!result.valid) {
@@ -36,11 +36,12 @@ function User (storage) {
   }
 
   this.remove = async (req, res) => {
-    logger.debug({ label: 'USER CONTROLLER', message: 'Remove user request: ' + JSON.stringify(req.body) })
-
     try {
+      logger.debug({ label: 'USER CONTROLLER', message: 'Remove user request: ' + JSON.stringify(req.body) })
+  
       await _storage.remove('user', req.body)
       res.status(200).end()
+  
     } catch (e) {
       logger.error({ label: 'USER CONTROLLER', message: `Error getting email from storage: ${e}` })
       res.status(400).end()
@@ -48,19 +49,13 @@ function User (storage) {
   }
 
   this.find = async (req, res) => {
-    logger.debug({ label: 'USER CONTROLLER', message: 'Find user: ' + req.query.email })
-
     try {
-      if (!req.query.email) {
-        logger.error({ label: 'USER CONTROLLER', message: 'Error empty email in query' })
-        res.status(400).send()
-        return
-      }
+      logger.debug({ label: 'USER CONTROLLER', message: 'Find user: ' + req.query.email })
 
       const user = await _storage.find('user', req.query.email)
-
+      
       res.send(JSON.stringify({
-        email: req.query.email, rss: user.rss
+        email: user.email, rss: user.rss
       }))
     } catch (e) {
       logger.error({ label: 'USER CONTROLLER', message: `Error getting email from storage: ${e}` })

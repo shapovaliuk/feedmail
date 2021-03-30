@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "jsonschema": "^1.2.5",
     "mjml": "^4.6.2",
-    "mongodb": "^3.5.4",
+    "mongodb": "^3.6.5",
     "rss-parser": "^3.7.5",
     "winston": "^3.2.1"
   },

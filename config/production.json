@@ -2,12 +2,16 @@
     "feedmail": {
         "db": {
             "url": "",
-            "name": "prod"
+            "name": "prod",
+            "options": {
+                "useUnifiedTopology": true
+            }
         },
         "logger": {
             "level": "debug",
             "filename": "./backend.log"
-        }
+        },
+        "port": ""
     }
 }
 

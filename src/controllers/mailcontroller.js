@@ -23,15 +23,15 @@ function MailController (storage, parser, mail, sender) {
   }
 
   this.sendPreview = async (req, res) => {
-    logger.info({ label: 'MAIL CONTROLLER', message: 'Get preview to: ' + JSON.stringify(req.query.email) })
-
-    if (!req.query.email) {
-      logger.error({ label: 'MAIL CONTROLLER', message: 'Empty email' })
-      res.status(400).send('empty email')
-      return
-    }
-
     try {
+      logger.info({ label: 'MAIL CONTROLLER', message: 'Get preview to: ' + JSON.stringify(req.query.email) })
+
+      if (!req.query.email) {
+        logger.error({ label: 'MAIL CONTROLLER', message: 'Empty email' })
+        res.status(400).send('empty email')
+        return
+      }
+
       const content = await prepare(req.query.email)
 
       res.set('Content-Type', 'text/html')
@@ -43,15 +43,15 @@ function MailController (storage, parser, mail, sender) {
   }
 
   this.sendMail = async (req, res) => {
-    logger.info({ label: 'MAIL CONTROLLER', message: 'Send mail to: ' + JSON.stringify(req.query.email) })
-
-    if (!req.query.email) {
-      logger.error({ label: 'MAIL CONTROLLER', message: 'Empty email' })
-      res.status(400).send('empty email')
-      return
-    }
-
     try {
+      logger.info({ label: 'MAIL CONTROLLER', message: 'Send mail to: ' + JSON.stringify(req.query.email) })
+
+      if (!req.query.email) {
+        logger.error({ label: 'MAIL CONTROLLER', message: 'Empty email' })
+        res.status(400).send('empty email')
+        return
+      }
+
       const content = await prepare(req.query.email)
       await _sender.sendMail(req.query.email, content.html)
 

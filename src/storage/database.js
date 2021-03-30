@@ -1,66 +1,59 @@
 const MongoClient = require('mongodb').MongoClient
-const { promisify } = require('util')
-
 const logger = require('../utils/logger')
 
-function Database (config) {
-  if (!(this instanceof Database)) {
-    return new Database(config)
+function Database () {
+  if (!new.target) {
+    return new Database()
   }
 
-  const _config = config
-  let _db = null;
+  let _db = null
+  let _client = null
 
-  (async function connect () {
+  this.connect = async (config) => {
     try {
-      const connectAsync = promisify(MongoClient.connect).bind(MongoClient)
-      const client = await connectAsync(process.env.COSMOS_DB_URI || _config.url)
-
-      _db = client.db(_config.name)
+      _client = await MongoClient.connect(config.url, config.options)
+      _db = _client.db(config.name)
 
       if (!_db) {
         logger.error({ label: 'DATABASE', message: "can't establish mongo connection reason: null client" })
-        setTimeout(connect, 1000)
-      } else {
-        logger.info({ label: 'DATABASE', message: 'successful establish DB connection' })
+        return;
       }
+
+      logger.info({ label: 'DATABASE', message: 'successful establish DB connection' })
+
     } catch (e) {
       logger.error({ label: 'DATABASE', message: e.message })
-      setTimeout(connect, 1000)
     }
-  })()
-
-  process.on('SIGTERM', () => {
-    _db.close()
-  })
+  }
 
   this.insert = async (name, content) => {
     const collection = _db.collection(name)
-    const updateAsync = promisify(collection.updateOne).bind(collection)
-
-    return updateAsync({ email: content.email }, { $set: { rss: content.rss } }, { upsert: true })
+    return collection.updateOne({ email: content.email }, { $set: { rss: content.rss } }, { upsert: true })
   }
 
   this.find = async (name, item) => {
     const collection = _db.collection(name)
-    const findAsync = promisify(collection.findOne).bind(collection)
-
-    return findAsync({}, { email: item })
+    return collection.findOne({}, { email: item })
   }
 
   this.update = async (name, oldContent, newContent) => {
     const collection = _db.collection(name)
-    const updateAsync = promisify(collection.updateOne).bind(collection)
-
-    return updateAsync(oldContent, newContent)
+    return collection.updateOne(oldContent, newContent)
   }
 
   this.remove = async (name, content) => {
     const collection = _db.collection(name)
-    const deleteAsync = promisify(collection.deleteOne).bind(collection)
-
-    return deleteAsync(content)
+    return collection.deleteOne(content)
   }
+
+  this.drop = async (name) => {
+    const collection = _db.collection(name)
+    return collection.drop()
+  }
+
+  process.on('SIGTERM', () => {
+    _db.close()
+  })
 }
 
 module.exports = Database

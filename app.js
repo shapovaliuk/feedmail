@@ -21,16 +21,18 @@ const userRoutes = require('./src/routes/userroutes')
 const mailRoutes = require('./src/routes/mailroutes')
 
 const dbConfig = config.get('feedmail.db')
+dbConfig.url = process.env.COSMOS_DB_URI || dbConfig.url
+
 const db = new Database(dbConfig)
+db.connect(dbConfig)
 
 const userController = new UserController(db)
 const mailController = new MailController(db, new RssParser(), new MailBuilder(), new Sender())
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || config.get('feedmail.port')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.json())
 
 app.use('/v1', userRoutes(userController))
 app.use('/v1', mailRoutes(mailController))

@@ -73,8 +73,8 @@ function deleteRss (id) {
 function sendMail () {
   const email = document.getElementById('input_email').value
 
-  fetch(`/v1/mail/send?email=${email}`, {
-    method: 'GET'
+  fetch(`/v1/mail?email=${email}`, {
+    method: 'POST'
   })
     .then(res => {
       return res.text()
@@ -88,7 +88,7 @@ function sendMail () {
 function getPreview () {
   const email = document.getElementById('input_email').value
 
-  fetch(`/v1/mail/preview?email=${email}`, {
+  fetch(`/v1/mail?email=${email}`, {
     method: 'GET'
   })
     .then(res => {
@@ -106,9 +106,7 @@ function getPreview () {
 }
 
 function getData () {
-  const email = document.getElementById('input_email').value
-
-  fetch(`/v1/user?email=${email}`, {
+  fetch(`/v1/user`, {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8'

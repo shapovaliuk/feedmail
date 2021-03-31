@@ -5,7 +5,6 @@ const express = require('express')
 const path = require('path')
 
 const config = require('config')
-const bodyParser = require('body-parser')
 
 const logger = require('./src/utils/logger')
 const RssParser = require('./src/utils/rssparser')
@@ -21,7 +20,9 @@ const userRoutes = require('./src/routes/userroutes')
 const mailRoutes = require('./src/routes/mailroutes')
 
 const dbConfig = config.get('feedmail.db')
+
 const db = new Database()
+db.connect(dbConfig)
 
 const userController = new UserController(db)
 const mailController = new MailController(db, new RssParser(), new MailBuilder(), new Sender())
@@ -40,7 +41,5 @@ logger.info({ label: 'APP', message: `| __| __| __|   \\|  \\/  | /_\\ |_ _| |  
 logger.info({ label: 'APP', message: `| _|| _|| _|| |) | |\\/| |/ _ \\ | || |__  ` })
 logger.info({ label: 'APP', message: `|_| |___|___|___/|_|  |_/_/ \\_\\___|____| ` })
 logger.info({ label: 'APP', message: `                                         ` })
-
-db.connect(dbConfig)
 
 app.listen(port)

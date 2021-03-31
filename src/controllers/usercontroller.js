@@ -1,67 +1,38 @@
 const validate = require('jsonschema').validate
-
 const userSchema = require('../schema/userSchema')
-
 const logger = require('../utils/logger')
 
-function User (storage) {
-  if (!(this instanceof User)) {
-    return new User(storage)
+function UserController (storage) {
+  if (!new.target) {
+    return new UserController(storage)
   }
 
   const _storage = storage
 
-  this.add = async (req, res) => {
-    try {
-      logger.debug({ label: 'USER CONTROLLER', message: 'Add user request: ' + JSON.stringify(req.body) })
+  this.add = async (data) => {
+      logger.debug({ label: 'USER CONTROLLER', message: 'Add user request: ' + JSON.stringify(data) })
 
-      const result = validate(req.body, userSchema)
+      const result = validate(data, userSchema)
 
       if (!result.valid) {
         logger.error({ label: 'USER CONTROLLER', message: result })
-        res.status(400).send('Invalid request body')
-        return
+        throw new Error('invalid request body')
       }
 
-      await _storage.insert('user', {
-        email: req.body.email,
-        rss: req.body.rss || []
-      })
-
-      res.status(200).end()
-    } catch (e) {
-      logger.error({ label: 'USER CONTROLLER', message: `Error adding email to storage: ${e}` })
-      res.status(400).end()
-    }
+      storage.insert('user', { email: data.email, rss: data.rss || [] })
   }
 
-  this.remove = async (req, res) => {
-    try {
-      logger.debug({ label: 'USER CONTROLLER', message: 'Remove user request: ' + JSON.stringify(req.body) })
+  this.remove = async (data) => {
+      logger.debug({ label: 'USER CONTROLLER', message: 'Remove user request: ' + JSON.stringify(data) })
   
-      await _storage.remove('user', req.body)
-      res.status(200).end()
-  
-    } catch (e) {
-      logger.error({ label: 'USER CONTROLLER', message: `Error getting email from storage: ${e}` })
-      res.status(400).end()
-    }
+      return _storage.remove('user', data)
   }
 
-  this.find = async (req, res) => {
-    try {
-      logger.debug({ label: 'USER CONTROLLER', message: 'Find user: ' + req.query.email })
+  this.find = async (email) => {
+      logger.debug({ label: 'USER CONTROLLER', message: 'Find user: ' + email })
 
-      const user = await _storage.find('user', req.query.email)
-      
-      res.send(JSON.stringify({
-        email: user.email, rss: user.rss
-      }))
-    } catch (e) {
-      logger.error({ label: 'USER CONTROLLER', message: `Error getting email from storage: ${e}` })
-      res.status(400).send()
-    }
+      return _storage.find('user', email)
   }
 }
 
-module.exports = User
+module.exports = UserController

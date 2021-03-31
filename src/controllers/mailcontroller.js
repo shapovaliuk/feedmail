@@ -11,7 +11,7 @@ function MailController(storage, parser, mail, sender) {
   const _sender = sender
 
   this.build = async (email) => {
-    logger.info({ label: 'MAIL CONTROLLER', message: 'Get preview to: ' + email })
+    logger.debug({ label: 'MAIL CONTROLLER', message: 'Build mail for: ' + email })
 
     if (!email) {
       throw new Error('empty email')
@@ -24,13 +24,13 @@ function MailController(storage, parser, mail, sender) {
   }
 
   this.send = async (email, content) => {
-      logger.info({ label: 'MAIL CONTROLLER', message: 'Send mail to: ' + email })
+      logger.debug({ label: 'MAIL CONTROLLER', message: 'Send mail to: ' + email })
 
       if (!email) {
         throw new Error('empty email')
       }
   
-      await _sender.sendMail(email, content.html)
+      await _sender.send(email, content)
   }
 }
 

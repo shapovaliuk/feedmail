@@ -2,29 +2,14 @@
 
 WebApp wrote in node js and vanilla js for sending rss via email
 
-## Installation
 
-Run npm installation command in the project root folder
-
-```bash
-npm i
-```
-
-## Run on the local machine
-
-To run on the local machine enter command in the project root folder
-
-```bash
-npm run start:dev
-```
-
-## Run on Azure
-1. Create AppService and configure deployment using Github actions.
-2. Create CosmosDb with mongo client API in version 3.x
-3. Wait until provisioning of the services will finish
-4. Enter in AppService go to Configuration.
-5. You should be seeing *Application settings* and *Connection strings* sections
-6. Add two environment variables in section *Application settings*
+1. Tworzymy usługę App Service i konfigurujemy jej wdrożenie przy użyciu actions Github.
+![Image alt](https://github.com/shapovaliuk/feedmail/raw/img/appservice1.png)
+3. Create CosmosDb with mongo client API in version 3.x
+4. Wait until provisioning of the services will finish
+5. Enter in AppService go to Configuration.
+6. You should be seeing *Application settings* and *Connection strings* sections
+7. Add two environment variables in section *Application settings*
 - NODE_ENV with value production
 - NODE_CONFIG with value
 

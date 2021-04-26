@@ -4,7 +4,7 @@ WebApp wrote in node js and vanilla js for sending rss via email
 
 
 1. Tworzymy usługę App Service i konfigurujemy jej wdrożenie przy użyciu actions Github.
-![Alt Text](https://github.com/shapovaliuk/feedmail/blob/main/img/appservice1.png)
+![Alt Text](img/appservice1.png)
 3. Create CosmosDb with mongo client API in version 3.x
 4. Wait until provisioning of the services will finish
 5. Enter in AppService go to Configuration.

@@ -5,13 +5,26 @@ WebApp wrote in node js and vanilla js for sending rss via email
 
 1. Tworzymy usługę App Service i konfigurujemy jej wdrożenie przy użyciu actions Github.
 ![Alt Text](img/appservice1.png)
-3. Create CosmosDb with mongo client API in version 3.x
-4. Wait until provisioning of the services will finish
-5. Enter in AppService go to Configuration.
-6. You should be seeing *Application settings* and *Connection strings* sections
-7. Add two environment variables in section *Application settings*
-- NODE_ENV with value production
-- NODE_CONFIG with value
+![Alt Text](img/deploy.png)
+
+Tutaj znajdziemy url adres naszej strony
+![Alt Text](img/appservice2.png)
+
+3. Tworzymy CosmosDb z mongo client API w naszym przypadku w wersji 3.6
+![Alt Text](img/cosmos.png)
+
+4. Wchodzimy do actions w repozytorium i naciskamy New Workflow
+ ![Alt Text](img/yml.png)
+ 
+ Wybieramy Deploy Node.js to Azure Web App
+ ![Alt Text](img/yml2.png)
+ 
+ I u nas się pojawia plik *azure.yml*
+ ![Alt Text](img/yml3.png)
+
+5. Wchodzimy do ustawien App Service i dodajemy zmienne środowiskowe w *Application settings*
+- NODE_ENV z wartością production
+- NODE_CONFIG z wartością :
 
       {
           "feedmail": {
@@ -32,10 +45,36 @@ WebApp wrote in node js and vanilla js for sending rss via email
               }  
           }
       }
-
+![Alt Text](img/nodeconfig.png)
 **Remark**
 
-Notice there are empty fields in this config:
-- url - you need to copy-paste the connection string of the newly created CosmosDb. The connection string is visible in the Configuration section in the CosmosDb,
-- apiKey - you need to create an account in mailgun portal. You will get an API key after login into mailgun portal,
-- domain - if you don't have a domain you can use the sandbox domain created on mailgun web page. For more info go see mailgun documentation page.
+- url - skopiowaliśmy i wkleiliśmy parametry połączenia nowo utworzonego CosmosDb. Parametry połączenia są widoczne w sekcji Konfiguracja w CosmosDb.
+![Alt Text](img/cosmos2.png)
+
+- apiKey - założyliśmy konto w portalu mailgun. Klucz API jest dostępnyz po zalogowaniu się do portalu mailgun.
+![Alt Text](img/apikey.png)
+
+- domain - użyliśmy domeny utworzonej na stronie mailgun.
+![Alt Text](img/domain.png)
+
+# Testy
+
+*LoadPage*
+![Alt Text](img/loadpage1.png)
+![Alt Text](img/loadpage2.png)
+
+*GetUser*
+![Alt Text](img/getuser1.png)
+![Alt Text](img/getuser2.png)
+
+*PostUser*
+![Alt Text](img/postuser1.png)
+![Alt Text](img/postuser1.png)
+
+*GetMail*
+![Alt Text](img/getmail1.png)
+![Alt Text](img/getmail2.png)
+
+*PostMail*
+![Alt Text](img/postmail1.png)
+![Alt Text](img/postmail2.png)
